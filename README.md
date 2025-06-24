@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bus Booking System - Backend API
 
 A complete backend API for a bus booking system similar to RedBus, built with Node.js, Express.js, and SQLite.
@@ -470,3 +471,6 @@ For support and questions, please open an issue in the repository.
 ---
 
 **Happy Coding! 🚌✨** 
+=======
+# bus-booking-backend
+>>>>>>> d2d4667ffc1a0dc5c3b411ed63fc346a8c44b425
