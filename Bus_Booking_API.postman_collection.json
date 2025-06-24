@@ -1,0 +1,435 @@
+{
+	"info": {
+		"_postman_id": "bus-booking-api-collection",
+		"name": "Bus Booking API",
+		"description": "Complete API collection for Bus Booking System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"phone\": \"+1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.token) {",
+									"        pm.environment.set('authToken', response.token);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"John Updated Doe\",\n    \"phone\": \"+1987654321\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Bus Search",
+			"item": [
+				{
+					"name": "Search Buses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/buses/search?source=Bangalore&destination=Mumbai&travelDate=2024-03-15",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "buses", "search"],
+							"query": [
+								{
+									"key": "source",
+									"value": "Bangalore"
+								},
+								{
+									"key": "destination",
+									"value": "Mumbai"
+								},
+								{
+									"key": "travelDate",
+									"value": "2024-03-15"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Buses with Filters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/buses/search?source=Bangalore&destination=Mumbai&travelDate=2024-03-15&busType=AC Sleeper&minPrice=500&maxPrice=1000&departureTime=night",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "buses", "search"],
+							"query": [
+								{
+									"key": "source",
+									"value": "Bangalore"
+								},
+								{
+									"key": "destination",
+									"value": "Mumbai"
+								},
+								{
+									"key": "travelDate",
+									"value": "2024-03-15"
+								},
+								{
+									"key": "busType",
+									"value": "AC Sleeper"
+								},
+								{
+									"key": "minPrice",
+									"value": "500"
+								},
+								{
+									"key": "maxPrice",
+									"value": "1000"
+								},
+								{
+									"key": "departureTime",
+									"value": "night"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Seat Availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/buses/1/seats?travelDate=2024-03-15",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "buses", "1", "seats"],
+							"query": [
+								{
+									"key": "travelDate",
+									"value": "2024-03-15"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Create Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"scheduleId\": 1,\n    \"travelDate\": \"2024-03-15\",\n    \"boardingPoint\": \"Majestic Bus Stand\",\n    \"droppingPoint\": \"Central Bus Stand\",\n    \"passengers\": [\n        {\n            \"name\": \"John Doe\",\n            \"age\": 25,\n            \"gender\": \"Male\",\n            \"seatNumber\": \"L12\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/bookings/create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "bookings", "create"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.bookingId) {",
+									"        pm.environment.set('bookingId', response.bookingId);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Bookings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookings",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "bookings"]
+						}
+					}
+				},
+				{
+					"name": "Get Booking Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "bookings", "{{bookingId}}"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/bookings/{{bookingId}}/cancel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "bookings", "{{bookingId}}", "cancel"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Initiate Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookingId\": {{bookingId}},\n    \"paymentMethod\": \"card\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/payments/initiate",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "payments", "initiate"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.transactionId) {",
+									"        pm.environment.set('transactionId', response.transactionId);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Confirm Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"transactionId\": \"{{transactionId}}\",\n    \"status\": \"success\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/payments/confirm",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "payments", "confirm"]
+						}
+					}
+				},
+				{
+					"name": "Get Payment Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/payments/{{bookingId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "payments", "{{bookingId}}", "status"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/health",
+					"host": ["{{baseUrl}}"],
+					"path": ["health"]
+				}
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookingId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "transactionId",
+			"value": "",
+			"type": "string"
+		}
+	]
+} 
